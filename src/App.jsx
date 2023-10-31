@@ -1,16 +1,26 @@
 import './App.css'
 import './index.css'
 import { Square } from './Square'
-import { checkWinnerFrom, checkEndGame } from './board'
+import { checkWinnerFrom, checkEndGame, WINNER_COMBOS } from './board'
 import { WinnerModal } from './WinnerModal'
 import { TURNS } from './board'
-import { WINNER_COMBOS } from './board'
-
 import React, { useState } from 'react'
-
-
+import { Players } from './Players'
 
 function App() {
+
+  //seleccion jugador
+  const [players, setPlayers] = useState({
+    playerXName: '',
+    playerOName: '',
+    playerXSymbol: 'X',
+    playerOSymbol: 'O',
+  });
+
+  const handlePlayersSelected = (playerXName, playerOName, playerXSymbol, playerOSymbol) => {
+    setPlayers({ playerXName, playerOName, playerXSymbol, playerOSymbol });
+  };
+
 
   const [board, setBoard] = useState(Array(9).fill(null))
 
@@ -51,44 +61,51 @@ function App() {
 
   return (
     <main className='board'>
+
       <h1>🐱 Tic Tac Toe 🐱</h1>
 
-      <section className='game'>
-        {
-          board.map((square, index) => {
-            return (
-              <Square
-                key={index}
-                index={index}
-                updateBoard={updateBoard}
-              >
-                {square}
-              </Square>
-            )
-          })
-        }
-      </section>
+      {players.playerXName && players.playerOName ? (
 
-      <section className='turn'>
-        <Square isSelected={turn === TURNS.X}>
-          {TURNS.X}
-        </Square>
-        <Square isSelected={turn === TURNS.O}>
-          {TURNS.O}
-        </Square>
-      </section>
+        <>
+          <section className='game'>
+
+            {board.map((square, index) => {
+              return (
+                <Square
+                  key={index}
+                  index={index}
+                  updateBoard={updateBoard}
+                >
+                  {square}
+                </Square>
+              )
+            })}
+          </section>
+          <section className='turn'>
+            <Square isSelected={turn === TURNS.X}>
+              {TURNS.X} <p> {players.playerXName}</p>
+            </Square>
+            <Square isSelected={turn === TURNS.O}>
+              {TURNS.O} <p>{players.playerOName}</p>
+            </Square>
+          </section>
+        </>
+      ) : (
+        <Players onPlayersSelected={handlePlayersSelected} />
+      )}
 
       <WinnerModal resetGame={resetGame} winner={winner} />
 
-      <div className="fixed-bottom p-4">
-        Made with ❤️ by 
+      { /* firma */}
+      <div className="fixed-bottom p-4" id="firma">
+        Made with ❤️ by
         <a href="https://github.com/sm-nat" target="_blank" className="enlace-natalia">
           Natalia Silva Medina
         </a>
       </div>
-
     </main>
+
   )
 }
 
-export default App
+export default App;

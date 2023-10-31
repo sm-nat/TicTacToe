@@ -88,3 +88,9 @@ body {
   display: flex;
   gap: 15px;
 }
+p{
+  font-size: 10px;
+}
+#firma{
+  padding-top: 30px;
+}
